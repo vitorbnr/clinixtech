@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    container_name: clinixtech-db
+    environment:
+      POSTGRES_DB: clinixtech_db
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - clinixtech-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: clinixtech-mq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    networks:
+      - clinixtech-network
+
+volumes:
+  postgres_data:
+
+networks:
+  clinixtech-network:
+    driver: bridge
